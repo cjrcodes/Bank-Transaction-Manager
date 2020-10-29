@@ -26,6 +26,33 @@ public class Checking extends Account {
 		this.directDeposit = directDeposit;
 		// TODO Auto-generated constructor stub
 	}
+	
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Checking)) {
+			return false;
+		}
+		Checking test = (Checking) obj;
+
+		if (!(this.getHolder().equals(test.getHolder()))) {
+			return false;
+		}
+		if (this.getBalance() != test.getBalance()) {
+			return false;
+		}
+		if (this.getOpenDate() != test.getOpenDate()) {
+			return false;
+		}
+		
+		if(this.directDeposit != test.directDeposit) {
+			return false;
+		}
+
+		return true;
+	}
+	
+	public String toString() {
+		return this.getAccountType() + this.getHolder().toString() + "*  $" + String.format("%.2f", this.getBalance()) + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
+	}
 
 	/**
 	 * Get the account, primarily for printing
@@ -34,7 +61,7 @@ public class Checking extends Account {
 	 */
 	@Override
 	public String getAccountType() {
-		return "Checking";
+		return "*Checking*";
 	}
 
 	/**
@@ -45,7 +72,7 @@ public class Checking extends Account {
 	 */
 	@Override
 	public String getSpecialCondition() {
-		return directDeposit == true ? "*direct deposit account*" : "";
+		return this.directDeposit == true ? "*direct deposit account*" : "";
 	}
 
 	/**

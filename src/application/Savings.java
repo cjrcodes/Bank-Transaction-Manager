@@ -36,6 +36,33 @@ public class Savings extends Account {
 		this.isLoyal = isLoyal;
 		// TODO Auto-generated constructor stub
 	}
+	
+	public boolean equals(Object obj) {
+		if (!(obj instanceof Savings)) {
+			return false;
+		}
+		Savings test = (Savings) obj;
+
+		if (!(this.getHolder().equals(test.getHolder()))) {
+			return false;
+		}
+		if (this.getBalance() != test.getBalance()) {
+			return false;
+		}
+		if (this.getOpenDate() != test.getOpenDate()) {
+			return false;
+		}
+		
+		if(this.isLoyal != test.isLoyal) {
+			return false;
+		}
+
+		return true;
+	}
+	
+	public String toString() {
+		return this.getAccountType() + this.getHolder().toString() + "*  $" + this.getBalance() + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
+	}
 
 	/**
 	 * Get the account, primarily for printing
@@ -44,7 +71,7 @@ public class Savings extends Account {
 	 */
 	@Override
 	public String getAccountType() {
-		return "Savings";
+		return "*Savings*";
 	}
 
 	/**

@@ -35,13 +35,41 @@ public class MoneyMarket extends Account {
 	public void withdraw() {
 		this.withdrawals++;
 	}
+	
+	public boolean equals(Object obj) {
+		if (!(obj instanceof MoneyMarket)) {
+			return false;
+		}
+		MoneyMarket test = (MoneyMarket) obj;
+
+		if (!(this.getHolder().equals(test.getHolder()))) {
+			return false;
+		}
+		if (this.getBalance() != test.getBalance()) {
+			return false;
+		}
+		if (this.getOpenDate() != test.getOpenDate()) {
+			return false;
+		}
+		
+		if(this.withdrawals != test.withdrawals) {
+			return false;
+		}
+
+		return true;
+	}
+	
+	public String toString() {
+		return this.getAccountType() + this.getHolder().toString() + "*  $" + this.getBalance() + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
+	}
+	
 	/**
 	 * Get the account, primarily for printing
 	 * @return String of the account type, in this case money market
 	 */
 	@Override
 	public String getAccountType() {
-		return "MoneyMarket";
+		return "*MoneyMarket*";
 	}
 	
 	/**
