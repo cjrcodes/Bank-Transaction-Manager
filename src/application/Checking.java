@@ -33,21 +33,11 @@ public class Checking extends Account {
 		}
 		Checking test = (Checking) obj;
 
-		if (!(this.getHolder().equals(test.getHolder()))) {
-			return false;
-		}
-		if (this.getBalance() != test.getBalance()) {
-			return false;
-		}
-		if (this.getOpenDate() != test.getOpenDate()) {
-			return false;
+		if ((this.getHolder().toString().equals((test.getHolder().toString())))) {
+			return true;
 		}
 		
-		if(this.directDeposit != test.directDeposit) {
-			return false;
-		}
-
-		return true;
+		return false;
 	}
 	
 	public String toString() {

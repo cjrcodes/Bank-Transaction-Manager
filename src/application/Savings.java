@@ -43,25 +43,15 @@ public class Savings extends Account {
 		}
 		Savings test = (Savings) obj;
 
-		if (!(this.getHolder().equals(test.getHolder()))) {
-			return false;
-		}
-		if (this.getBalance() != test.getBalance()) {
-			return false;
-		}
-		if (this.getOpenDate() != test.getOpenDate()) {
-			return false;
-		}
-		
-		if(this.isLoyal != test.isLoyal) {
-			return false;
+		if ((this.getHolder().toString().equals((test.getHolder().toString())))) {
+			return true;
 		}
 
-		return true;
+		return false;
 	}
 	
 	public String toString() {
-		return this.getAccountType() + this.getHolder().toString() + "*  $" + this.getBalance() + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
+		return this.getAccountType() + this.getHolder().toString() + "*  $" + String.format("%.2f", this.getBalance()) + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
 	}
 
 	/**

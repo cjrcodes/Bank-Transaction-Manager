@@ -31,6 +31,12 @@ public class MoneyMarket extends Account {
 		this.withdrawals = 0;
 		// TODO Auto-generated constructor stub
 	}
+	
+	public MoneyMarket(Profile holder, double balance, Date dateOpen, int withdrawals) {
+		super(holder, balance, dateOpen);
+		this.withdrawals = withdrawals;
+		// TODO Auto-generated constructor stub
+	}
 
 	public void withdraw() {
 		this.withdrawals++;
@@ -42,25 +48,17 @@ public class MoneyMarket extends Account {
 		}
 		MoneyMarket test = (MoneyMarket) obj;
 
-		if (!(this.getHolder().equals(test.getHolder()))) {
-			return false;
-		}
-		if (this.getBalance() != test.getBalance()) {
-			return false;
-		}
-		if (this.getOpenDate() != test.getOpenDate()) {
-			return false;
+		if ((this.getHolder().toString().equals((test.getHolder().toString())))) {
+			return true;
 		}
 		
-		if(this.withdrawals != test.withdrawals) {
-			return false;
-		}
+		
 
-		return true;
+		return false;
 	}
 	
 	public String toString() {
-		return this.getAccountType() + this.getHolder().toString() + "*  $" + this.getBalance() + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
+		return this.getAccountType() + this.getHolder().toString() + "*  $" + String.format("%.2f", this.getBalance()) + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
 	}
 	
 	/**

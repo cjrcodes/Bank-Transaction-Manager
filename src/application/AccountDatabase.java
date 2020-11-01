@@ -17,7 +17,7 @@ public class AccountDatabase {
 	 * sets size to 0
 	 */
 	public AccountDatabase() {
-		accounts = new Account[5];
+		this.accounts = new Account[5];
 		this.size = 0;
 	}
 
@@ -29,16 +29,23 @@ public class AccountDatabase {
 	 *         return -1 if not found
 	 */
 	private int find(Account account) {
+		
+		if(this.size == 0) {
+			//System.out.print("Accounts is empty\n");
+			return -1;
+		}
 
 		for (int i = 0; i < this.accounts.length; i++) {
 
-			if (this.accounts[i] != null && this.accounts[i] == account) {
+			if (this.accounts[i] != null && this.accounts[i].equals(account)) {
 				return i;
 			}
 		}
 
 		return -1;
 	}
+	
+	
 
 	/**
 	 * Grow the array by 5, called once the accounts capacity has been reached
@@ -62,17 +69,21 @@ public class AccountDatabase {
 	 */
 	public boolean add(Account account) {
 		if (this.size == this.accounts.length) {
+			//System.out.println("Growing size");
 			this.grow();
 		}
 
 		if (this.find(account) != -1) {
+			//System.out.println("Account already exists");
 			return false;
 		}
 
-		for (int i = 0; i < this.size; i++) {
+		//System.out.println("Looping");
+		for (int i = 0; i < this.accounts.length; i++) {
 			if (this.accounts[i] == null) {
 				this.accounts[i] = account;
 				this.size++;
+				//System.out.println("Account added");
 				return true;
 			}
 		}
@@ -84,7 +95,7 @@ public class AccountDatabase {
 	 * Remove an account from the database
 	 * 
 	 * @param account to be removed from the database
-	 * @return boolean true if the account was removed, false if the account already
+	 * @return boolean true if the account was removed, false if the account does not
 	 *         exists
 	 */
 	public boolean remove(Account account) {
@@ -94,7 +105,8 @@ public class AccountDatabase {
 		}
 
 		this.accounts[accountIndex] = null;
-		int lastIndex = -1;
+		this.size--;
+		int lastIndex = 0;
 		for (int i = accountIndex; i < this.accounts.length - 1; i++) {
 			if (this.accounts[i + 1] == null) {
 				break;
@@ -111,6 +123,12 @@ public class AccountDatabase {
 		return true;
 	} // return false if account doesn’t exist
 
+	public int getSize() {
+		return this.size;
+	}
+	
+	
+	
 	/**
 	 * Deposit an amount to an account
 	 * 
@@ -189,12 +207,39 @@ public class AccountDatabase {
 		System.out.println("\n--Listing accounts in the database--\n");
 
 		for (int i = 0; i < this.size; i++) {
-			System.out.println("*" + this.accounts[i].getAccountType() + "*" + this.accounts[i].getHolder().toString()
-					+ "*" + " $" + String.format("%.2f", this.accounts[i].getBalance()) + "*"
-					+ this.accounts[i].getOpenDate().toString() + this.accounts[i].getSpecialCondition());
+			System.out.println(this.accounts[i].toString());
 		}
 
 		System.out.println("--end of listing--");
+	}
+	
+	public static void main(String [] args) {
+		AccountDatabase db = new AccountDatabase();
+		Account c = new Checking(new Profile("Christian", "Rodrihguex"), 2,new Date(1,2,2000), false);
+		
+		Account d = new Savings(new Profile("Christian", "Rodrihguex"), 2,new Date(1,2,2000), false);
+		
+		Account e = new Checking(new Profile("Christian", "Rodrihguex"), 2,new Date(1,2,2000), false);
+
+
+		System.out.println(db.add(c));
+		
+		db.printAccounts();
+		
+		db.add(d);
+		
+		db.add(e);
+		
+		db.add(d);
+
+		
+		System.out.println(db.find(c));
+		
+		System.out.println(db.size);
+		
+				db.printAccounts();
+
+		
 	}
 
 }

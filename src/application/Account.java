@@ -52,17 +52,12 @@ public abstract class Account {
 		}
 		Account test = (Account) obj;
 
-		if (!(this.holder.equals(test.holder))) {
-			return false;
+		if ((this.getHolder().toString().equals((test.getHolder().toString())))) {
+			return true;
 		}
-		if (this.balance != test.balance) {
-			return false;
-		}
-		if (this.dateOpen != test.dateOpen) {
-			return false;
-		}
+	
 
-		return true;
+		return false;
 	}
 
 	/**

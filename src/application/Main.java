@@ -11,8 +11,14 @@ public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {
 		try {
-			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("Design.fxml"));
-			Scene scene = new Scene(root,400,400);
+			BorderPane root = (BorderPane)FXMLLoader.load(getClass().getResource("TransactionManager.fxml"));
+
+			FXMLLoader loader = new FXMLLoader(getClass().getResource("TransactionManager.fxml"));
+			
+			Controller controller = new Controller();
+			loader.setController(controller);
+			
+			Scene scene = new Scene(root);
 			scene.getStylesheets().add(getClass().getResource("application.css").toExternalForm());
 			primaryStage.setScene(scene);
 			primaryStage.setTitle("Transaction Manager (Project 3)");

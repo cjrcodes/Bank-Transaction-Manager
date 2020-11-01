@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.RadioButton?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.RowConstraints?>
+
+<BorderPane maxHeight="600" maxWidth="600" minHeight="600" minWidth="600" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
+   <bottom>
+      <TextArea fx:id="messageArea" editable="false" prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+   </bottom>
+   <center>
+      <TabPane prefHeight="200.0" prefWidth="200.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab text="Open/Close Account">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane alignment="CENTER" hgap="20.0" layoutX="10.0" layoutY="20.0" prefHeight="264.0" prefWidth="580.0">
+                          <columnConstraints>
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="94.0" minWidth="10.0" prefWidth="94.0" />
+                            <ColumnConstraints hgrow="SOMETIMES" maxWidth="161.0" minWidth="10.0" prefWidth="148.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="113.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="161.0" minWidth="10.0" prefWidth="131.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="193.0" minHeight="4.0" prefHeight="77.0" vgrow="SOMETIMES" />
+                            <RowConstraints maxHeight="213.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="213.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="213.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Account Type:" />
+                              <RadioButton fx:id="checking" mnemonicParsing="false" onMouseClicked="#checkingSelected" selected="true" text="Checking" GridPane.columnIndex="1">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="accountType" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="savings" mnemonicParsing="false" onMouseClicked="#savingsSelected" text="Savings" toggleGroup="$accountType" GridPane.columnIndex="2" />
+                              <RadioButton fx:id="moneyMarket" mnemonicParsing="false" onMouseClicked="#moneyMarketSelected" prefHeight="17.0" prefWidth="114.0" text="MoneyMarket" toggleGroup="$accountType" GridPane.columnIndex="3" />
+                              <Label prefHeight="17.0" prefWidth="100.0" text="Account Option:" GridPane.rowIndex="1" />
+                              <CheckBox fx:id="directDeposit" mnemonicParsing="false" text="Direct Deposit" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <CheckBox fx:id="isLoyal" mnemonicParsing="false" text="Loyal Customer" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label text="Name:" GridPane.rowIndex="2" />
+                              <TextField id="firstName" fx:id="firstName" prefHeight="25.0" prefWidth="131.0" promptText="First Name" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Label text="Date Opened:" GridPane.rowIndex="3" />
+                              <TextField fx:id="month" promptText="mm" GridPane.columnIndex="1" GridPane.rowIndex="3" />
+                              <TextField fx:id="day" prefHeight="25.0" prefWidth="134.0" promptText="dd" GridPane.columnIndex="2" GridPane.rowIndex="3" />
+                              <TextField fx:id="year" promptText="yyyy" GridPane.columnIndex="3" GridPane.rowIndex="3" />
+                              <TextField fx:id="lastName" prefHeight="25.0" prefWidth="131.0" promptText="Last Name" GridPane.columnIndex="2" GridPane.rowIndex="2" />
+                              <Label text="Balance ($):" GridPane.rowIndex="4" />
+                              <TextField fx:id="balance" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                           </children>
+                        </GridPane>
+                        <Button fx:id="openAccount" layoutX="125.0" layoutY="309.0" mnemonicParsing="false" onAction="#checkInputs" text="Open Account" />
+                        <Button fx:id="closeAccount" layoutX="254.0" layoutY="309.0" mnemonicParsing="false" onAction="#removeAccount" text="Close Account" />
+                        <Button fx:id="clearFields" layoutX="382.0" layoutY="309.0" mnemonicParsing="false" onAction="#clearInput" text="Clear Input" />
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Deposit/Withdraw Funds">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <GridPane alignment="CENTER" hgap="20.0" layoutX="10.0" layoutY="14.0" prefHeight="264.0" prefWidth="580.0">
+                           <columnConstraints>
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="169.0" minWidth="10.0" prefWidth="156.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="203.0" minWidth="10.0" prefWidth="127.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="170.0" minWidth="10.0" prefWidth="122.0" />
+                              <ColumnConstraints hgrow="SOMETIMES" maxWidth="161.0" minWidth="10.0" prefWidth="114.0" />
+                           </columnConstraints>
+                           <rowConstraints>
+                              <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="193.0" minHeight="4.0" prefHeight="77.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="213.0" minHeight="10.0" prefHeight="62.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="213.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
+                              <RowConstraints maxHeight="213.0" minHeight="10.0" prefHeight="84.0" vgrow="SOMETIMES" />
+                           </rowConstraints>
+                           <children>
+                              <Label text="Account Type:" />
+                              <RadioButton fx:id="checking1" mnemonicParsing="false" onMouseClicked="#checkingSelected" selected="true" text="Checking" GridPane.columnIndex="1">
+                                 <toggleGroup>
+                                    <ToggleGroup fx:id="accountType1" />
+                                 </toggleGroup>
+                              </RadioButton>
+                              <RadioButton fx:id="savings1" mnemonicParsing="false" onMouseClicked="#savingsSelected" text="Savings" toggleGroup="$accountType1" GridPane.columnIndex="2" />
+                              <RadioButton fx:id="moneyMarket1" mnemonicParsing="false" onMouseClicked="#moneyMarketSelected" prefHeight="17.0" prefWidth="114.0" text="MoneyMarket" toggleGroup="$accountType1" GridPane.columnIndex="3" />
+                              <Label text="Name:" GridPane.rowIndex="1" />
+                              <TextField id="firstName" fx:id="firstName1" prefHeight="25.0" prefWidth="131.0" promptText="First Name" GridPane.columnIndex="1" GridPane.rowIndex="1" />
+                              <TextField fx:id="lastName1" prefHeight="25.0" prefWidth="131.0" promptText="Last Name" GridPane.columnIndex="2" GridPane.rowIndex="1" />
+                              <Label text="Amount to add/withdrawl ($):" GridPane.rowIndex="2" />
+                              <TextField fx:id="balance1" prefHeight="25.0" prefWidth="152.0" GridPane.columnIndex="1" GridPane.rowIndex="2" />
+                              <Button alignment="CENTER" mnemonicParsing="false" text="Withdraw" GridPane.columnIndex="2" GridPane.rowIndex="4" />
+                              <Button mnemonicParsing="false" text="Deposit" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+                           </children>
+                        </GridPane>
+                     </children></AnchorPane>
+            </content>
+          </Tab>
+          <Tab text="Account Database">
+            <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0" />
+            </content>
+          </Tab>
+        </tabs>
+      </TabPane>
+   </center>
+</BorderPane>
