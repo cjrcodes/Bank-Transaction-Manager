@@ -109,7 +109,7 @@ public class AccountDatabase {
 		}
 
 		return true;
-	} // return false if account doesn’t exist
+	} // return false if account doesnï¿½t exist
 
 	/**
 	 * Deposit an amount to an account
@@ -162,24 +162,57 @@ public class AccountDatabase {
 	 * Return the accounts sorted by date opened
 	 */
 	private void sortByDateOpen() {
-	} // sort in ascending order
+		int index = 0;
+		Account temp = null;
+		for (int i = 0; i < this.size-1; i++){
+			index = i;
+			for (int j = i+1; j < this.size; j++){
+				if ( (this.accounts[i].getOpenDate()).compareTo(this.accounts[j].getOpenDate()) == 1 )
+					index = j;
+			}
+			temp = this.accounts[index];
+			this.accounts[index] = this.accounts[i];
+			this.accounts[i] = temp;
+		}
+	}
 
 	/**
 	 * Return the accounts sorted by last name
 	 */
 	private void sortByLastName() {
+		int index, space, space2 = 0;
+		String last, last2 = null;
+		Account temp = null;
+		for (int i = 0; i < this.size-1; i++){
+			index = i;
+			for (int j = i+1; j < this.size; j++){
+				space = this.accounts[i].getHolder().toString().indexOf(" ");
+				space2 = this.accounts[j].getHolder().toString().indexOf(" ");
+				last = this.accounts[j].getHolder().toString().substring(space);
+				last2 = this.accounts[j].getHolder().toString().substring(space2);
+				if ( last.compareTo(last2) > 0 )
+					index = j;
+			}
+			temp = this.accounts[index];
+			this.accounts[index] = this.accounts[i];
+			this.accounts[i] = temp;
+		}
 	} // sort in ascending order
 
 	/**
 	 * Print the accounts sorted by date opened
 	 */
 	public void printByDateOpen() {
+		this.sortByDateOpen();
+		this.printAccounts();
 	}
 
 	/**
 	 * Print the accounts sorted by date opened
 	 */
 	public void printByLastName() {
+		this.sortByLastName();
+		this.printAccounts();
 	}
 
 	/**

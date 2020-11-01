@@ -22,9 +22,9 @@ public class Checking extends Account {
 	}
 
 	public Checking(Profile holder, double balance, Date dateOpen, boolean directDeposit) {
+		// TODO Auto-generated constructor stub
 		super(holder, balance, dateOpen);
 		this.directDeposit = directDeposit;
-		// TODO Auto-generated constructor stub
 	}
 
 	/**
@@ -54,10 +54,7 @@ public class Checking extends Account {
 	 * @return double 0.05 interest
 	 */
 	@Override
-	public double monthlyInterest() {
-
-		return 0.05;
-	}
+	public double monthlyInterest() { return 0.05; }
 
 	/**
 	 * Gets the monthly fee of a checking account, 0 if direct deposit and over 1500
@@ -65,9 +62,6 @@ public class Checking extends Account {
 	 * @return double monthly fee
 	 */
 	@Override
-	public double monthlyFee() {
-
-		return this.directDeposit == true || this.getBalance() >= 1500 ? 0 : 25;
-	}
+	public double monthlyFee() { return this.directDeposit == true || this.getBalance() >= 1500 ? 0 : 25; }
 
 }
