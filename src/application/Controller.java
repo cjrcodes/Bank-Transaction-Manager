@@ -28,6 +28,7 @@ public class Controller {
 	
 	private int characterLimit = 30;
 	
+	//Open/Close Account Tab
 	@FXML
 	private RadioButton checking;
 	
@@ -73,8 +74,52 @@ public class Controller {
 	@FXML
 	private Button clearFields;
 	
+	@FXML 
+	private Button clearOutput;
+	
 	@FXML
 	private TextArea messageArea;
+	
+	//Deposit/Withdraw Funds
+	
+	@FXML
+	private RadioButton checking1;
+	
+	@FXML
+	private RadioButton savings1;
+	
+	@FXML
+	private RadioButton moneyMarket1;
+	
+	@FXML
+	private TextField firstName1;
+	
+	@FXML
+	private TextField lastName1;
+	
+	@FXML
+	private TextField amountChanged;
+	
+	@FXML
+	private Button deposit;
+	
+	@FXML
+	private Button withdraw;
+	
+	@FXML
+	private ToggleGroup accountType1;
+	
+	@FXML
+	private Button printAllBtn;
+	
+	@FXML
+	private Button openDateBtn;
+	
+	@FXML
+	private Button sortLastNameBtn;
+	
+	@FXML
+	private Button resetBtn;
 	
 	@FXML
 	void initialize() {
@@ -216,11 +261,24 @@ public class Controller {
     	}
 	}
 	
-	
+	@FXML
+	Double checkAmountChanged(ActionEvent actionEvent) {
+		try {
+    		Double amount = Double.parseDouble(amountChanged.getText()); 
+    		
+    		return amount;
+    		
+    	}
+    	//Show the error message in the TextArea.
+    	catch (NumberFormatException e) {
+    		messageArea.appendText("Amount to add/withdraw must be a double, cannot contain letters or symbols.\n");
+    		return null;
+    	}
+	}
 	
 	@FXML
-	void checkInputs(ActionEvent actionEvent) {
-		
+	Account checkInputs(ActionEvent actionEvent) {
+
 		Date date = checkDate(actionEvent);
 		
 		Profile holder = checkProfile(actionEvent);
@@ -228,15 +286,10 @@ public class Controller {
 		Double amount = checkBalance(actionEvent);
 		
 		if(date == null || holder == null || amount == null) {
-			return;
+			return null;
 		}
 		
-		Account account;
-		
-		//DecimalFormat df = new DecimalFormat("#.00");
-		//df.format(amount);
-		
-		
+		Account account = null;
 		
 		RadioButton selectedAccountType = (RadioButton) accountType.getSelectedToggle();
 		String selectedAccountValue = selectedAccountType.getText();
@@ -263,6 +316,29 @@ public class Controller {
 		else {
 			account = new MoneyMarket(holder, amount, date);
 		}
+		
+		return account;
+		
+		
+	}
+	
+	
+	@FXML
+	void addAccount(ActionEvent actionEvent) {
+		
+		
+		
+		Account account = checkInputs(actionEvent);
+		
+		if(account == null) {
+			return;
+		}
+		
+		//DecimalFormat df = new DecimalFormat("#.00");
+		//df.format(amount);
+		
+		
+		
 		
 		boolean accountWasAdded = accounts.add(account);
 		
@@ -339,6 +415,128 @@ public class Controller {
     	}
 	}
 	
+	@FXML
+	void addCredit(ActionEvent actionEvent) {
+		
+		Profile profile = checkProfile(actionEvent);
+		Double amount = checkAmountChanged(actionEvent);
+		
+		
+		if(profile == null || amount == null) {
+    		messageArea.appendText("Name and amount must be valid to add/withdraw");
+			return;
+		}
+		
+		Account account;
+		
+		RadioButton selectedAccountType = (RadioButton) accountType1.getSelectedToggle();
+		String selectedAccountValue = selectedAccountType.getText();
+		
+		if(selectedAccountValue.equals("Checking")) {
+			boolean applyDirectDeposit = false;
+			
+			if(directDeposit.isSelected()) {
+				applyDirectDeposit = true;
+			}
+			account = new Checking(profile, 0, new Date(1,1,2000), applyDirectDeposit);
+		}
+		
+		else if(accountType.getSelectedToggle().equals(savings)) {
+			boolean applyIsLoyal = false;
+			
+			if(isLoyal.isSelected()) {
+				applyIsLoyal = true;
+			}
+			account = new Savings(profile, 0, new Date(1,1,2000), applyIsLoyal);
+
+		}
+		
+		else {
+			account = new MoneyMarket(profile, 0, new Date(1,1,2000));
+		}
+		
+
+		
+		if(!accounts.deposit(account, amount)) {
+			messageArea.appendText("Account not found, cannot deposit or withdraw\n");
+			return;
+		}
+		
+		messageArea.appendText("$" + String.format("%.2f", amount) + " added to " + account.getAccountType() + " " + account.getHolder().toString() + "\n");
+
+		
+	}
+	
+	@FXML
+	void withdraw(ActionEvent actionEvent) {
+		Profile profile = checkProfile(actionEvent);
+		Double amount = checkAmountChanged(actionEvent);
+		
+		
+		if(profile == null || amount == null) {
+    		messageArea.appendText("Name and amount must be valid to add/withdraw");
+			return;
+		}
+		
+		Account account;
+		
+		RadioButton selectedAccountType = (RadioButton) accountType1.getSelectedToggle();
+		String selectedAccountValue = selectedAccountType.getText();
+		
+		if(selectedAccountValue.equals("Checking")) {
+			boolean applyDirectDeposit = false;
+			
+			if(directDeposit.isSelected()) {
+				applyDirectDeposit = true;
+			}
+			account = new Checking(profile, 0, new Date(1,1,2000), applyDirectDeposit);
+		}
+		
+		else if(accountType.getSelectedToggle().equals(savings)) {
+			boolean applyIsLoyal = false;
+			
+			if(isLoyal.isSelected()) {
+				applyIsLoyal = true;
+			}
+			account = new Savings(profile, 0, new Date(1,1,2000), applyIsLoyal);
+
+		}
+		
+		else {
+			account = new MoneyMarket(profile, 0, new Date(1,1,2000));
+		}
+		
+
+		int withdrawalResult = accounts.withdrawal(account, amount);
+		if(withdrawalResult == -1) {
+			messageArea.appendText("Account not found, cannot deposit or withdraw\n");
+			return;
+		}
+		
+		else if(withdrawalResult == 1){
+			messageArea.appendText("Insufficient funds, cannot withdraw\n");
+			return;
+		}
+		
+		messageArea.appendText("$" + String.format("%.2f", amount) + " withdrawn from " + account.getAccountType() + " " + account.getHolder().toString() + "\n");
+		
+	}
+	
+	@FXML
+	void printAllAccounts(ActionEvent actionEvent) {
+		messageArea.appendText(accounts.printAccountsToTextArea());
+	}
+	
+	@FXML
+	void printByOpenDate(ActionEvent actionEvent) {
+		messageArea.appendText(accounts.printByDateOpenToTextArea());
+	}
+	
+	@FXML
+	void printByLastName(ActionEvent actionEvent) {
+		messageArea.appendText(accounts.printByLastNameToTextArea());
+	}
+	
 	
 	@FXML
 	void clearInput(ActionEvent actionEvent) {
@@ -348,6 +546,11 @@ public class Controller {
 		day.clear();
 		year.clear();
 		balance.clear();
+	}
+	
+	@FXML
+	void clearOutput(ActionEvent actionEvent) {
+		messageArea.clear();
 	}
 	
 

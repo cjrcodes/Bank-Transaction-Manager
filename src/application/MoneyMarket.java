@@ -42,6 +42,7 @@ public class MoneyMarket extends Account {
 		this.withdrawals++;
 	}
 	
+	@Override
 	public boolean equals(Object obj) {
 		if (!(obj instanceof MoneyMarket)) {
 			return false;
@@ -57,8 +58,14 @@ public class MoneyMarket extends Account {
 		return false;
 	}
 	
+	@Override
 	public String toString() {
 		return this.getAccountType() + this.getHolder().toString() + "*  $" + String.format("%.2f", this.getBalance()) + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
+	}
+	
+	public void debit(Double amount) {
+		this.debit(amount);
+		this.withdraw();
 	}
 	
 	/**

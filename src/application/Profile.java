@@ -39,5 +39,9 @@ public class Profile {
 	public String toString() {
 		return this.fname + " " + this.lname;
 	}
+	
+	public String getLastName() {
+		return this.lname;
+	}
 
 }

@@ -67,6 +67,8 @@ public abstract class Account {
 	 */
 	public void debit(double amount) {
 		this.balance -= amount;
+		
+		
 	}
 
 	/**

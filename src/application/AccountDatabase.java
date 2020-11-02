@@ -106,10 +106,17 @@ public class AccountDatabase {
 
 		this.accounts[accountIndex] = null;
 		this.size--;
+		
+		//Lone element was removed or last element in the array was removed
+		if(this.size == 0 || accountIndex == accounts.length - 1) {
+			return true;
+		}
+		
+		//Shift the array leftwards
 		int lastIndex = 0;
 		for (int i = accountIndex; i < this.accounts.length - 1; i++) {
 			if (this.accounts[i + 1] == null) {
-				break;
+				return true;
 			}
 			lastIndex = i + 1;
 			this.accounts[i] = this.accounts[i + 1];
@@ -141,8 +148,10 @@ public class AccountDatabase {
 		if (this.find(account) == -1) {
 			return false;
 		}
+		
+		int accountIndex = this.find(account);
 
-		account.credit(amount);
+		this.accounts[accountIndex].credit(amount);
 
 		return true;
 	}
@@ -162,16 +171,16 @@ public class AccountDatabase {
 			return -1;
 		}
 
-		if (account.getBalance() - amount < 0) {
+		if (this.accounts[accountIndex].getBalance() - amount < 0) {
 			return 1;
 		}
 
-		if (account.getAccountType().equals("MoneyMarket")) {
-			account = (MoneyMarket) account;
+		if (this.accounts[accountIndex].getAccountType().equals("*MoneyMarket*")) {
+			this.accounts[accountIndex] = (MoneyMarket) account;
 
 		}
 
-		account.debit(amount);
+		this.accounts[accountIndex].debit(amount);
 
 		return 0;
 	}
@@ -180,24 +189,69 @@ public class AccountDatabase {
 	 * Return the accounts sorted by date opened
 	 */
 	private void sortByDateOpen() {
+		int index = 0;
+		Account temp = null;
+		for (int i = 0; i < this.size-1; i++){
+			index = i;
+			for (int j = i+1; j < this.size; j++){
+				if ( (this.accounts[i].getOpenDate()).compareTo(this.accounts[j].getOpenDate()) == 1 )
+					index = j;
+			}
+			temp = this.accounts[index];
+			this.accounts[index] = this.accounts[i];
+			this.accounts[i] = temp;
+		}
+		
+		
 	} // sort in ascending order
 
 	/**
 	 * Return the accounts sorted by last name
 	 */
 	private void sortByLastName() {
+		int index, space, space2 = 0;
+		String last, last2 = null;
+		Account temp = null;
+		for (int i = 0; i < this.size-1; i++){
+			index = i;
+			for (int j = i+1; j < this.size; j++){
+				space = this.accounts[i].getHolder().toString().indexOf(" ");
+				space2 = this.accounts[j].getHolder().toString().indexOf(" ");
+				last = this.accounts[j].getHolder().toString().substring(space);
+				last2 = this.accounts[j].getHolder().toString().substring(space2);
+				if ( last.compareTo(last2) > 0 )
+					index = j;
+			}
+			temp = this.accounts[index];
+			this.accounts[index] = this.accounts[i];
+			this.accounts[i] = temp;
+		}
 	} // sort in ascending order
 
 	/**
 	 * Print the accounts sorted by date opened
 	 */
 	public void printByDateOpen() {
+		this.sortByDateOpen();
+		this.printAccounts();
+	}
+	
+	public String printByDateOpenToTextArea() {
+		this.sortByDateOpen();
+		return this.printAccountsToTextArea();
 	}
 
 	/**
 	 * Print the accounts sorted by date opened
 	 */
 	public void printByLastName() {
+		this.sortByLastName();
+		this.printAccountsToTextArea();
+	}
+	
+	public String printByLastNameToTextArea() {
+		this.sortByLastName();
+		return this.printAccountsToTextArea();
 	}
 
 	/**
@@ -213,7 +267,20 @@ public class AccountDatabase {
 		System.out.println("--end of listing--");
 	}
 	
-	public static void main(String [] args) {
+	public String printAccountsToTextArea() {
+		
+		String text = "\n--Listing accounts in the database--\n";
+		
+		for (int i = 0; i < this.size; i++) {
+			text += (this.accounts[i].toString() + "\n");
+		}
+
+		text += "--end of listing--\n";
+		
+		return text;
+	}
+	
+	/*public static void main(String [] args) {
 		AccountDatabase db = new AccountDatabase();
 		Account c = new Checking(new Profile("Christian", "Rodrihguex"), 2,new Date(1,2,2000), false);
 		
@@ -240,6 +307,6 @@ public class AccountDatabase {
 				db.printAccounts();
 
 		
-	}
+	}*/
 
 }
