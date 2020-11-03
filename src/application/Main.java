@@ -6,7 +6,12 @@ import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.BorderPane;
 
-
+/**
+ * Main class, runs the execution of Project 3. Connects the FXML document with the controller and forms a scene to run on the primary stage.
+ * 
+ * @author Christian Rodriguez, Yazhini Shanmugam
+ *
+ */
 public class Main extends Application {
 	@Override
 	public void start(Stage primaryStage) {

@@ -55,7 +55,6 @@ public abstract class Account {
 		if ((this.getHolder().toString().equals((test.getHolder().toString())))) {
 			return true;
 		}
-	
 
 		return false;
 	}
@@ -67,8 +66,7 @@ public abstract class Account {
 	 */
 	public void debit(double amount) {
 		this.balance -= amount;
-		
-		
+
 	}
 
 	/**
@@ -131,9 +129,17 @@ public abstract class Account {
 	 * @return String of the subclass type (Savings, Checking, MoneyMarket)
 	 */
 	public abstract String getAccountType();
-	
+
+	/**
+	 * Gets the account label, primarily for exporting
+	 * @return String label associated with the account type
+	 */
 	public abstract String getAccountLabel();
-	
+
+	/**
+	 * Checks for any special conditions on the account type
+	 * @return String string of anything to be appended while printing
+	 */
 	public abstract String getConditionToFile();
 
 	/**

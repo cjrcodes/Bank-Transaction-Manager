@@ -36,7 +36,12 @@ public class Savings extends Account {
 		this.isLoyal = isLoyal;
 		// TODO Auto-generated constructor stub
 	}
-	
+
+	/**
+	 * Checks if object types are equal and if they have the same holder
+	 * @param obj Object to be compared
+	 * @return boolean true if objects are equal
+	 */
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Savings)) {
 			return false;
@@ -49,9 +54,15 @@ public class Savings extends Account {
 
 		return false;
 	}
+
 	
+	/**
+	 * Prints Savings account details to string
+	 * @return String Savings account in string format
+	 */
 	public String toString() {
-		return this.getAccountType() + this.getHolder().toString() + "*  $" + String.format("%.2f", this.getBalance()) + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
+		return this.getAccountType() + this.getHolder().toString() + "*  $" + String.format("%.2f", this.getBalance())
+				+ "*" + this.getOpenDate().toString() + this.getSpecialCondition();
 	}
 
 	/**
@@ -98,6 +109,10 @@ public class Savings extends Account {
 		return this.getBalance() >= 300 ? 0 : 5;
 	}
 
+	/**
+	 * Gets the account label, primarily for exporting
+	 * @return String label associated with the account type
+	 */
 	@Override
 	public String getAccountLabel() {
 		// TODO Auto-generated method stub

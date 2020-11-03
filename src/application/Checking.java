@@ -21,12 +21,24 @@ public class Checking extends Account {
 		this.directDeposit = false;
 	}
 
+	/**
+	 * Constructor for Checking
+	 * @param holder Profile of the holder of the account
+	 * @param balance the amount in the account
+	 * @param dateOpen date the account was opened
+	 * @param directDeposit whether or not the account has direct deposit enabled
+	 */
 	public Checking(Profile holder, double balance, Date dateOpen, boolean directDeposit) {
 		super(holder, balance, dateOpen);
 		this.directDeposit = directDeposit;
 		// TODO Auto-generated constructor stub
 	}
 	
+	/**
+	 * Checks if object types are equal and if they have the same holder
+	 * @param obj Object to be compared
+	 * @return boolean true if objects are equal
+	 */
 	public boolean equals(Object obj) {
 		if (!(obj instanceof Checking)) {
 			return false;
@@ -39,7 +51,10 @@ public class Checking extends Account {
 		
 		return false;
 	}
-	
+	/**
+	 * Prints Checking account details to string
+	 * @return String Checking account in string format
+	 */
 	public String toString() {
 		return this.getAccountType() + this.getHolder().toString() + "*  $" + String.format("%.2f", this.getBalance()) + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
 	}
@@ -54,6 +69,10 @@ public class Checking extends Account {
 		return "*Checking*";
 	}
 	
+	/**
+	 * Gets the account label, primarily for exporting
+	 * @return String label associated with the account type
+	 */
 	@Override
 	public String getAccountLabel() {
 		return "C";
@@ -92,6 +111,10 @@ public class Checking extends Account {
 		return this.directDeposit == true || this.getBalance() >= 1500 ? 0 : 25;
 	}
 
+	/**
+	 * Checks if direct deposit is true, and returns a string corresponding to that. 
+	 * @return String true string if direct deposit is enabled, false if not.
+	 */
 	@Override
 	public String getConditionToFile() {
 		// TODO Auto-generated method stub
