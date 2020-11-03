@@ -98,4 +98,16 @@ public class Savings extends Account {
 		return this.getBalance() >= 300 ? 0 : 5;
 	}
 
+	@Override
+	public String getAccountLabel() {
+		// TODO Auto-generated method stub
+		return "S";
+	}
+
+	@Override
+	public String getConditionToFile() {
+		// TODO Auto-generated method stub
+		return this.isLoyal == true ? ",true" : ",false";
+	}
+
 }

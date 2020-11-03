@@ -59,6 +59,12 @@ public class MoneyMarket extends Account {
 	}
 	
 	@Override
+	public void debit(double amount) {
+		super.debit(amount);
+		this.withdrawals++;
+	}
+	
+	@Override
 	public String toString() {
 		return this.getAccountType() + this.getHolder().toString() + "*  $" + String.format("%.2f", this.getBalance()) + "*" + this.getOpenDate().toString() + this.getSpecialCondition();
 	}
@@ -104,6 +110,18 @@ public class MoneyMarket extends Account {
 	public double monthlyFee() {
 		// TODO Auto-generated method stub
 		return this.withdrawals < 6 && this.getBalance() >= 2500 ? 0 : 12;
+	}
+
+	@Override
+	public String getAccountLabel() {
+		// TODO Auto-generated method stub
+		return "M";
+	}
+
+	@Override
+	public String getConditionToFile() {
+		// TODO Auto-generated method stub
+		return this.getSpecialCondition() != "" ? "," + this.withdrawals : ",0";
 	}
 
 	/*public static void main(String [] args) {

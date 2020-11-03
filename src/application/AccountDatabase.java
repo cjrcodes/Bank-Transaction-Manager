@@ -30,6 +30,8 @@ public class AccountDatabase {
 	 */
 	private int find(Account account) {
 		
+		
+		
 		if(this.size == 0) {
 			//System.out.print("Accounts is empty\n");
 			return -1;
@@ -175,10 +177,10 @@ public class AccountDatabase {
 			return 1;
 		}
 
-		if (this.accounts[accountIndex].getAccountType().equals("*MoneyMarket*")) {
-			this.accounts[accountIndex] = (MoneyMarket) account;
-
-		}
+		/*if (this.accounts[accountIndex].getAccountType().equals("*MoneyMarket*")) {
+			this.accounts[accountIndex] = (MoneyMarket) this.accounts[accountIndex];
+			
+		}*/
 
 		this.accounts[accountIndex].debit(amount);
 
@@ -190,18 +192,20 @@ public class AccountDatabase {
 	 */
 	private void sortByDateOpen() {
 		int index = 0;
-		Account temp = null;
-		for (int i = 0; i < this.size-1; i++){
-			index = i;
-			for (int j = i+1; j < this.size; j++){
-				if ( (this.accounts[i].getOpenDate()).compareTo(this.accounts[j].getOpenDate()) == 1 )
-					index = j;
-			}
-			temp = this.accounts[index];
-			this.accounts[index] = this.accounts[i];
-			this.accounts[i] = temp;
-		}
-		
+        Account temp = null;
+        for (int i = 0; i < this.size-1; i++){
+            index = i;
+            for (int j = i+1; j < this.size; j++){
+                if ( (this.accounts[index].getOpenDate()).compareTo(this.accounts[j].getOpenDate()) == 1 )
+                    index = j;
+            }
+
+            temp = this.accounts[index];
+            this.accounts[index] = this.accounts[i];
+            this.accounts[i] = temp;
+        }
+        
+        
 		
 	} // sort in ascending order
 
@@ -209,23 +213,21 @@ public class AccountDatabase {
 	 * Return the accounts sorted by last name
 	 */
 	private void sortByLastName() {
-		int index, space, space2 = 0;
-		String last, last2 = null;
-		Account temp = null;
-		for (int i = 0; i < this.size-1; i++){
-			index = i;
-			for (int j = i+1; j < this.size; j++){
-				space = this.accounts[i].getHolder().toString().indexOf(" ");
-				space2 = this.accounts[j].getHolder().toString().indexOf(" ");
-				last = this.accounts[j].getHolder().toString().substring(space);
-				last2 = this.accounts[j].getHolder().toString().substring(space2);
-				if ( last.compareTo(last2) > 0 )
-					index = j;
-			}
-			temp = this.accounts[index];
-			this.accounts[index] = this.accounts[i];
-			this.accounts[i] = temp;
-		}
+		int index, i, j = 0;
+        Account temp = null;
+        for ( i = 0; i < this.size-1; i++){
+            index = i;
+            for ( j = i+1; j < this.size; j++){
+                if ( this.accounts[index].getHolder().getLastName().toUpperCase().compareTo(this.accounts[j].getHolder().getLastName().toUpperCase()) > 0 )
+                    index = j;
+            }
+
+            temp = this.accounts[index];
+            this.accounts[index] = this.accounts[i];
+            this.accounts[i] = temp;
+            this.printAccounts();
+        }
+		
 	} // sort in ascending order
 
 	/**
@@ -238,7 +240,7 @@ public class AccountDatabase {
 	
 	public String printByDateOpenToTextArea() {
 		this.sortByDateOpen();
-		return this.printAccountsToTextArea();
+		return this.printAccountsOpenDateToTextArea();
 	}
 
 	/**
@@ -251,20 +253,20 @@ public class AccountDatabase {
 	
 	public String printByLastNameToTextArea() {
 		this.sortByLastName();
-		return this.printAccountsToTextArea();
+		return this.printAccountsSortLastNameToTextArea();
 	}
 
 	/**
 	 * Print all the accounts in the accounts array
 	 */
 	public void printAccounts() {
-		System.out.println("\n--Listing accounts in the database--\n");
+		//System.out.println("\n--Listing accounts in the database--\n");
 
 		for (int i = 0; i < this.size; i++) {
-			System.out.println(this.accounts[i].toString());
+			//System.out.println(this.accounts[i].toString());
 		}
 
-		System.out.println("--end of listing--");
+		//System.out.println("--end of listing--");
 	}
 	
 	public String printAccountsToTextArea() {
@@ -278,6 +280,46 @@ public class AccountDatabase {
 		text += "--end of listing--\n";
 		
 		return text;
+	}
+	
+public String printAccountsSortLastNameToTextArea() {
+		
+		String text = "\n--Printing statements by last name--\n";
+		
+		for (int i = 0; i < this.size; i++) {
+			text += (this.accounts[i].toString() + "\n");
+			text += ("-interest: $ " + String.format("%.2f", this.accounts[i].monthlyInterest()) + "\n");
+			text += ("-fee: $ " + String.format("%.2f", this.accounts[i].monthlyFee()) + "\n");
+			text += ("-new balance: $ " + String.format("%.2f", (this.accounts[i].getBalance() - this.accounts[i].monthlyFee() + this.accounts[i].monthlyInterest())) + "\n\n");
+		}
+
+		text += "--end of listing--\n";
+		
+		return text;
+	}
+
+public String printAccountsOpenDateToTextArea() {
+	
+	String text = "\n--Printing statements by date opened--\n";
+	
+	for (int i = 0; i < this.size; i++) {
+		text += (this.accounts[i].toString() + "\n");
+		text += ("-interest: $ " + String.format("%.2f", this.accounts[i].monthlyInterest()) + "\n");
+		text += ("-fee: $ " + String.format("%.2f", this.accounts[i].monthlyFee()) + "\n");
+		text += ("-new balance: $ " + String.format("%.2f", (this.accounts[i].getBalance() - this.accounts[i].monthlyFee() + this.accounts[i].monthlyInterest())) + "\n\n");
+	}
+
+	text += "--end of listing--\n";
+	
+	return text;
+}
+	
+	public Account [] getAccounts() {
+		return this.accounts;
+	}
+	
+	public int getAccountIndex(Account account) {
+		return this.find(account);
 	}
 	
 	/*public static void main(String [] args) {

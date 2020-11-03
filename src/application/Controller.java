@@ -1,7 +1,14 @@
 package application;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.text.DecimalFormat;
+import java.util.Arrays;
+
+import com.sun.tools.javac.util.StringUtils;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -122,26 +129,58 @@ public class Controller {
 	private Button resetBtn;
 	
 	@FXML
-	void initialize() {
-		isLoyal.setDisable(true);
-		
-		accounts = new AccountDatabase();
-		
-	}
+	private Button importBtn;
 	
 	@FXML
+	private Button exportBtn;
+	
+	
+	/*
+	 * Initializes the program, sets isLoyal to disabled as Checking is default and creates an instance of AccountDatabase
+	 */
+	@FXML
+	void initialize() {
+		
+		try {
+			isLoyal.setDisable(true);
+			
+			accounts = new AccountDatabase();
+		}
+		
+		catch (Exception e) {
+			messageArea.appendText("Error occurred initializing\n");
+    		return;
+		}
+	}
+	
+	
+	/*
+	 * Checking account is selected, disabled other account type settings
+	 */
+	@FXML
 	void checkingSelected(MouseEvent mouseEvent) {
+		try {
 			directDeposit.setDisable(false);
 			isLoyal.setDisable(true);
 			
 			if(isLoyal.isSelected()) {
 				isLoyal.setSelected(false);
 			}
-
+		}
+			
+		catch (Exception e) {
+			messageArea.appendText("Error occurred selecting Checking\n");
+    		return;
+		}
 	}
+	
+	/*
+	 * Savings account is selected, disabled other account type settings
+	 */
 	
 	@FXML
 	void savingsSelected(MouseEvent mouseEvent) {
+		try {
 			directDeposit.setDisable(true);
 			isLoyal.setDisable(false);
 
@@ -149,82 +188,126 @@ public class Controller {
 				directDeposit.setSelected(false);
 			}
 
+		}
+		
+		catch (Exception e) {
+			messageArea.appendText("Error occurred selecting Savings\n");
+    		return;
+		}
+			
 	}
 	
+	/*
+	 * MoneyMarket account is selected, disabled other account type settings
+	 */
 	@FXML
 	void moneyMarketSelected(MouseEvent mouseEvent) {
-		directDeposit.setDisable(true);
-		isLoyal.setDisable(true);
 		
-		if(isLoyal.isSelected()) {
-			isLoyal.setSelected(false);
+		try {
+			directDeposit.setDisable(true);
+			isLoyal.setDisable(true);
+			
+			if(isLoyal.isSelected()) {
+				isLoyal.setSelected(false);
+			}
+			
+			if(directDeposit.isSelected()) {
+				directDeposit.setSelected(false);
+			}
 		}
 		
-		if(directDeposit.isSelected()) {
-			directDeposit.setSelected(false);
+		catch (Exception e) {
+			messageArea.appendText("Error occurred selecting MoneyMarket\n");
+    		return;
 		}
 	}
 	
+	
+	/*
+	 * Remove account from the database
+	 */
 	@FXML
 	void removeAccount(ActionEvent actionEvent) {
 		
-		Profile holder = checkProfile(actionEvent);
-		
-		if(holder == null) {
-			return;
-		}
-		//System.out.println("Remove account called");
-		Account account;
-		
-		RadioButton selectedAccountType = (RadioButton) accountType.getSelectedToggle();
-		String selectedAccountValue = selectedAccountType.getText();
-		
-		if(selectedAccountValue.equals("Checking")) {
-			boolean applyDirectDeposit = false;
+		try {
+			Profile holder = checkProfile(actionEvent);
 			
-			if(directDeposit.isSelected()) {
-				applyDirectDeposit = true;
+			if(holder == null) {
+				return;
 			}
-			account = new Checking(holder, 0, null, applyDirectDeposit);
-		}
-		
-		else if(accountType.getSelectedToggle().equals(savings)) {
-			boolean applyIsLoyal = false;
+			//System.out.println("Remove account called");
+			Account account;
 			
-			if(isLoyal.isSelected()) {
-				applyIsLoyal = true;
+			RadioButton selectedAccountType = (RadioButton) accountType.getSelectedToggle();
+			String selectedAccountValue = selectedAccountType.getText();
+			
+			if(selectedAccountValue.equals("Checking")) {
+				boolean applyDirectDeposit = false;
+				
+				if(directDeposit.isSelected()) {
+					applyDirectDeposit = true;
+				}
+				account = new Checking(holder, 0, null, applyDirectDeposit);
 			}
-			account = new Savings(holder, 0, null, applyIsLoyal);
+			
+			else if(accountType.getSelectedToggle().equals(savings)) {
+				boolean applyIsLoyal = false;
+				
+				if(isLoyal.isSelected()) {
+					applyIsLoyal = true;
+				}
+				account = new Savings(holder, 0, null, applyIsLoyal);
+
+			}
+			
+			else {
+				account = new MoneyMarket(holder, 0, null);
+			}
+			
+			if(accounts.remove(account)) {
+				messageArea.appendText("Account removed.\n");
+				return;
+			}
+			
+			messageArea.appendText("Account not found.\n");
 
 		}
 		
-		else {
-			account = new MoneyMarket(holder, 0, null);
+		catch (Exception e) {
+			messageArea.appendText("Error occurred removing account\n");
+    		return;
 		}
 		
-		if(accounts.remove(account)) {
-			messageArea.appendText("Account removed.\n");
-			return;
-		}
 		
-		messageArea.appendText("Account not found.\n");
-
 	}
 	
+	
+	/*
+	 * Check the date for entry
+	 */
 	@FXML
 	Date checkDate(ActionEvent actionEvent) {
-		int monthInput = checkMonth(actionEvent);
-		int dayInput = checkDay(actionEvent);
-		int yearInput = checkYear(actionEvent);
 		
-		Date date = new Date(monthInput, dayInput, yearInput);
-		
-		if(!date.isValid()) {
-			messageArea.appendText("Date is not valid.\n");
-			return null;
+		try {
+			int monthInput = checkMonth(actionEvent);
+			int dayInput = checkDay(actionEvent);
+			int yearInput = checkYear(actionEvent);
+			
+			Date date = new Date(monthInput, dayInput, yearInput);
+			
+			if(!date.isValid()) {
+				messageArea.appendText("Date is not valid.\n");
+				return null;
+			}
+			
+			return new Date(monthInput, dayInput, yearInput);
 		}
 		
-		return new Date(monthInput, dayInput, yearInput);
+		catch (Exception e) {
+			messageArea.appendText("Error occurred checking date\n");
+    		return null;
+		}
+		
 	}
 	
 	@FXML
@@ -236,6 +319,25 @@ public class Controller {
 	    		return null;
 			}
 			return new Profile(firstName.getText().trim(), lastName.getText().trim());
+
+		}
+		
+		catch(NullPointerException e) {
+    		messageArea.appendText("First and last name is required. Please use a proper format.\n");
+    		return null;
+		}
+		
+	}
+	
+	@FXML
+	Profile checkProfileToChange(ActionEvent actionEvent) {
+		
+		try {
+			if(firstName1.getText().length() == 0 || lastName1.getText().length() == 0) {
+	    		messageArea.appendText("First and last name is required.\n");
+	    		return null;
+			}
+			return new Profile(firstName1.getText().trim(), lastName1.getText().trim());
 
 		}
 		
@@ -278,46 +380,55 @@ public class Controller {
 	
 	@FXML
 	Account checkInputs(ActionEvent actionEvent) {
-
-		Date date = checkDate(actionEvent);
 		
-		Profile holder = checkProfile(actionEvent);
-		
-		Double amount = checkBalance(actionEvent);
-		
-		if(date == null || holder == null || amount == null) {
-			return null;
-		}
-		
-		Account account = null;
-		
-		RadioButton selectedAccountType = (RadioButton) accountType.getSelectedToggle();
-		String selectedAccountValue = selectedAccountType.getText();
-		
-		if(selectedAccountValue.equals("Checking")) {
-			boolean applyDirectDeposit = false;
+		try {
+			Date date = checkDate(actionEvent);
 			
-			if(directDeposit.isSelected()) {
-				applyDirectDeposit = true;
-			}
-			account = new Checking(holder, amount, date, applyDirectDeposit);
-		}
-		
-		else if(accountType.getSelectedToggle().equals(savings)) {
-			boolean applyIsLoyal = false;
+			Profile holder = checkProfile(actionEvent);
 			
-			if(isLoyal.isSelected()) {
-				applyIsLoyal = true;
+			Double amount = checkBalance(actionEvent);
+			
+			if(date == null || holder == null || amount == null) {
+				return null;
 			}
-			account = new Savings(holder, amount, date, applyIsLoyal);
+			
+			Account account = null;
+			
+			RadioButton selectedAccountType = (RadioButton) accountType.getSelectedToggle();
+			String selectedAccountValue = selectedAccountType.getText();
+			
+			if(selectedAccountValue.equals("Checking")) {
+				boolean applyDirectDeposit = false;
+				
+				if(directDeposit.isSelected()) {
+					applyDirectDeposit = true;
+				}
+				account = new Checking(holder, amount, date, applyDirectDeposit);
+			}
+			
+			else if(accountType.getSelectedToggle().equals(savings)) {
+				boolean applyIsLoyal = false;
+				
+				if(isLoyal.isSelected()) {
+					applyIsLoyal = true;
+				}
+				account = new Savings(holder, amount, date, applyIsLoyal);
 
+			}
+			
+			else {
+				account = new MoneyMarket(holder, amount, date);
+			}
+			
+			return account;
 		}
 		
-		else {
-			account = new MoneyMarket(holder, amount, date);
+		catch (Exception e) {
+			messageArea.appendText("Error occurred checking inputs\n");
+    		return null;
 		}
+
 		
-		return account;
 		
 		
 	}
@@ -327,28 +438,28 @@ public class Controller {
 	void addAccount(ActionEvent actionEvent) {
 		
 		
-		
-		Account account = checkInputs(actionEvent);
-		
-		if(account == null) {
-			return;
+		try {
+			Account account = checkInputs(actionEvent);
+			
+			if(account == null) {
+				return;
+			}
+				
+			boolean accountWasAdded = accounts.add(account);
+			
+			if(!accountWasAdded) {
+				messageArea.appendText("Account already exists\n");
+				return;
+			}
+			
+			messageArea.appendText("Account successfully created!\n");
+			messageArea.appendText(account.toString() + "\n");
 		}
 		
-		//DecimalFormat df = new DecimalFormat("#.00");
-		//df.format(amount);
-		
-		
-		
-		
-		boolean accountWasAdded = accounts.add(account);
-		
-		if(!accountWasAdded) {
-			messageArea.appendText("Account already exists\n");
+		catch(Exception e) {
+			messageArea.appendText("Error occurred adding account\n");
 			return;
 		}
-		
-		messageArea.appendText("Account successfully created!\n");
-		messageArea.appendText(account.toString() + "\n");
 		
 		
 	}
@@ -417,59 +528,73 @@ public class Controller {
 	
 	@FXML
 	void addCredit(ActionEvent actionEvent) {
+		try {
+			Profile profile = checkProfileToChange(actionEvent);
+			Double amount = checkAmountChanged(actionEvent);
+			
+			
+			if(profile == null || amount == null) {
+	    		messageArea.appendText("Name and amount must be valid to add/withdraw");
+				return;
+			}
+			
+			
+			Account account;
+			
 		
-		Profile profile = checkProfile(actionEvent);
-		Double amount = checkAmountChanged(actionEvent);
+			RadioButton selectedAccountType = (RadioButton) accountType1.getSelectedToggle();
+			String selectedAccountValue = selectedAccountType.getText();
+			
+			//messageArea.appendText(selectedAccountValue);
+			if(selectedAccountValue.equals("Checking")) {
+				boolean applyDirectDeposit = false;
+				
+				if(directDeposit.isSelected()) {
+					applyDirectDeposit = true;
+				}
+				account = new Checking(profile, 0, new Date(1,1,2000), applyDirectDeposit);
+			}
+			
+			else if(selectedAccountValue.equals("Savings")) {
+				boolean applyIsLoyal = false;
+				
+				if(isLoyal.isSelected()) {
+					applyIsLoyal = true;
+				}
+				account = new Savings(profile, 0, new Date(1,1,2000), applyIsLoyal);
+
+			}
+			
+			else {
+				account = new MoneyMarket(profile, 0, new Date(1,1,2000));
+			}
+			
+
+			int accountIndex = accounts.getAccountIndex(account);
+			Account [] accountArray = accounts.getAccounts();
+			
+			if(!accounts.deposit(accountArray[accountIndex], amount)) {
+				messageArea.appendText("Account not found, cannot deposit or withdraw\n");
+				return;
+			}
+			
+			messageArea.appendText("$" + String.format("%.2f", amount) + " added to " + account.getAccountType() + " " + account.getHolder().toString() + "\n");
+		}
 		
-		
-		if(profile == null || amount == null) {
-    		messageArea.appendText("Name and amount must be valid to add/withdraw");
+		catch(Exception e) {
+			messageArea.appendText("Error occurred depositing\n");
 			return;
 		}
-		
-		Account account;
-		
-		RadioButton selectedAccountType = (RadioButton) accountType1.getSelectedToggle();
-		String selectedAccountValue = selectedAccountType.getText();
-		
-		if(selectedAccountValue.equals("Checking")) {
-			boolean applyDirectDeposit = false;
-			
-			if(directDeposit.isSelected()) {
-				applyDirectDeposit = true;
-			}
-			account = new Checking(profile, 0, new Date(1,1,2000), applyDirectDeposit);
-		}
-		
-		else if(accountType.getSelectedToggle().equals(savings)) {
-			boolean applyIsLoyal = false;
-			
-			if(isLoyal.isSelected()) {
-				applyIsLoyal = true;
-			}
-			account = new Savings(profile, 0, new Date(1,1,2000), applyIsLoyal);
-
-		}
-		
-		else {
-			account = new MoneyMarket(profile, 0, new Date(1,1,2000));
-		}
-		
-
-		
-		if(!accounts.deposit(account, amount)) {
-			messageArea.appendText("Account not found, cannot deposit or withdraw\n");
-			return;
-		}
-		
-		messageArea.appendText("$" + String.format("%.2f", amount) + " added to " + account.getAccountType() + " " + account.getHolder().toString() + "\n");
 
 		
 	}
 	
 	@FXML
 	void withdraw(ActionEvent actionEvent) {
-		Profile profile = checkProfile(actionEvent);
+		try {
+			
+		
+		Profile profile = checkProfileToChange(actionEvent);
 		Double amount = checkAmountChanged(actionEvent);
 		
 		
@@ -492,7 +617,7 @@ public class Controller {
 			account = new Checking(profile, 0, new Date(1,1,2000), applyDirectDeposit);
 		}
 		
-		else if(accountType.getSelectedToggle().equals(savings)) {
+		else if(selectedAccountValue.equals("Savings")) {
 			boolean applyIsLoyal = false;
 			
 			if(isLoyal.isSelected()) {
@@ -506,8 +631,11 @@ public class Controller {
 			account = new MoneyMarket(profile, 0, new Date(1,1,2000));
 		}
 		
+		int accountIndex = accounts.getAccountIndex(account);
+		Account [] accountArray = accounts.getAccounts();
+		
 
-		int withdrawalResult = accounts.withdrawal(account, amount);
+		int withdrawalResult = accounts.withdrawal(accountArray[accountIndex], amount);
 		if(withdrawalResult == -1) {
 			messageArea.appendText("Account not found, cannot deposit or withdraw\n");
 			return;
@@ -519,43 +647,343 @@ public class Controller {
 		}
 		
 		messageArea.appendText("$" + String.format("%.2f", amount) + " withdrawn from " + account.getAccountType() + " " + account.getHolder().toString() + "\n");
+		}
+		
+		catch (Exception e) {
+			messageArea.appendText("Error occurred withdrawing\n");
+			return;
+		}
 		
 	}
 	
 	@FXML
 	void printAllAccounts(ActionEvent actionEvent) {
-		messageArea.appendText(accounts.printAccountsToTextArea());
+		try {
+			messageArea.appendText(accounts.printAccountsToTextArea());
+
+		}
+		
+		catch(Exception e) {
+			messageArea.appendText("Error printing all accounts");
+			return;
+		}
 	}
 	
 	@FXML
 	void printByOpenDate(ActionEvent actionEvent) {
-		messageArea.appendText(accounts.printByDateOpenToTextArea());
+		try {
+			messageArea.appendText(accounts.printByDateOpenToTextArea());
+
+		}
+		
+		catch(Exception e) {
+			messageArea.appendText("Error sorting by open date");
+			return;
+		}
 	}
 	
 	@FXML
 	void printByLastName(ActionEvent actionEvent) {
-		messageArea.appendText(accounts.printByLastNameToTextArea());
+		try {
+			messageArea.appendText(accounts.printByLastNameToTextArea());
+
+		}
+		
+		catch(Exception e) {
+			messageArea.appendText("Error sorting by last name");
+			return;
+		}
 	}
 	
 	
 	@FXML
 	void clearInput(ActionEvent actionEvent) {
-		firstName.clear();
-		lastName.clear();
-		month.clear();
-		day.clear();
-		year.clear();
-		balance.clear();
+		try {
+			firstName.clear();
+			lastName.clear();
+			month.clear();
+			day.clear();
+			year.clear();
+			balance.clear();
+		}
+		
+		catch(Exception e) {
+			messageArea.appendText("Error clearing input");
+			return;
+		}
 	}
 	
 	@FXML
 	void clearOutput(ActionEvent actionEvent) {
-		messageArea.clear();
+		try {
+			messageArea.clear();
+
+		}
+		
+		catch(Exception e) {
+			messageArea.appendText("Error clearing output");
+			return;
+		}
 	}
 	
+	@FXML
+    void importFile(ActionEvent event) {
+		try {
+    	FileChooser chooser = new FileChooser();
+		chooser.setTitle("Open Source File for the Import");
+		chooser.getExtensionFilters().addAll(new ExtensionFilter("Text Files", "*.txt"),
+				new ExtensionFilter("All Files", "*.*"));
+		Stage stage = new Stage();
+		File sourceFile = chooser.showOpenDialog(stage);
+		Account account;
+		BufferedReader reader;
+		String[] accountProperties;
+		
+			reader = new BufferedReader(new FileReader(
+					sourceFile));
+			String line = reader.readLine();
+			while (line != null) {
+				accountProperties = line.split(",");
+				
+				account = checkFileInput(accountProperties);
+				if(account == null) {
+					line = reader.readLine();
+				}
+				
+				else {
+				
+				accounts.add(account);
+				messageArea.appendText(line + "\n");
+				// read next line
+				line = reader.readLine();
+				}
+			}
+			reader.close();
+		} catch (Exception e) {
+			e.printStackTrace();
+			
+			messageArea.appendText("File contains improper input format, please check each entry to ensure correctness\n");
+			return;
+		}
+	}		//get the reference of the source file
+		//write code to read from the file.
+	
+	Account checkFileInput(String [] account) {
+		try {
+			String accountType = account[0].trim();
+			String firstName = account[1].trim();
+			String lastName = account[2].trim();
+			String balance = account[3].trim();
+			String[] date = account[4].trim().split("/");
+			String condition = account[5].trim();
+			
+			//messageArea.appendText(Arrays.toString(account));
+			
+			if(firstName.length() == 0 || lastName.length() == 0) {
+				messageArea.appendText("First and last name is required\n");
+
+				return null;
+			}
+			
+			if(!accountType.equals("S") && !accountType.equals("C") && !accountType.equals("M")) {
+				messageArea.appendText("Account type is not valid\n");
+				return null;
+			}
+			
+			Double validBalance = checkFileBalance(balance);
+			
+			if(validBalance == null) {
+				messageArea.appendText("Balance is not valid\n");
+				return null;
+			}
+			
+			Date d = checkFileDate(date);
+			
+			
+			if(!d.isValid()) {
+				messageArea.appendText("Date is not valid\n");
+
+				return null;
+			}
+			
+			if(!checkFileCondition(accountType, condition)) {
+				return null;
+			}
+			
+			Profile profile = new Profile(firstName, lastName);
+			
+			Account accountToAdd = null;
+			
+			if(accountType.equals("S")) {
+				accountToAdd = new Savings(profile, validBalance, d, Boolean.parseBoolean(condition));
+				return accountToAdd;
+			}
+			
+			else if(accountType.equals("C")){
+				accountToAdd = new Checking(profile, validBalance, d, Boolean.parseBoolean(condition));
+				return accountToAdd;
+
+
+			}
+			
+			else {
+				accountToAdd = new MoneyMarket(profile, validBalance, d, Integer.parseInt(condition));
+				return accountToAdd;
+
+			}
+			
+			
+		}
+		
+		catch(Exception e) {
+			messageArea.appendText("File contains improper input format, please check each entry to ensure correctness\n");
+			return null;
+		}
+	}
+	
+	
+	boolean checkFileCondition(String accountType, String condition) {
+		try {
+			
+			if(accountType.equals("M")) {
+				int withdrawals = Integer.parseInt(condition);
+				return true;
+			}
+			
+				if(!condition.equals("true") && !condition.equals("false")) {
+					messageArea.appendText("Invalid account condition, must be true or false\n");
+					return false;
+				}
+			
+			
+			return true;
+		}
+		
+		catch(Exception e) {
+			messageArea.appendText("Invalid account condition, must be integer if M, or true or false if S or C\n");
+
+			return false;
+
+		}
+		
+			}
+	
+	Double checkFileBalance(String balance) {
+		try {
+    		Double amount = Double.parseDouble(balance); 
+    		
+    		return amount;
+    		
+    	}
+    	//Show the error message in the TextArea.
+    	catch (NumberFormatException e) {
+    		messageArea.appendText("Balance must be a double, cannot contain letters or symbols.\n");
+    		return null;
+    	}
+	}
+	
+	Date checkFileDate(String [] date) {
+		try {
+    		int monthAsInt = Integer.parseInt(date[0]); 
+    		
+    		if(monthAsInt < 1 || monthAsInt > 12) {
+    			messageArea.appendText("Month must be an integer between 1 and 12 (Inclusive).\n");
+        		return null;
+    		}
+    		
+    		int dayAsInt = Integer.parseInt(date[1]); 
+    		
+    		if(dayAsInt < 1 || dayAsInt > 31) {
+    			messageArea.appendText("Day must be an integer between 1 and 31 (Inclusive).\n");
+        		return null;
+    		}
+    		
+        		int yearAsInt = Integer.parseInt(date[2]); 
+        		
+        		if(yearAsInt < 2000 || yearAsInt > 2100) {
+        			messageArea.appendText("Year must be an integer between 2000 and 2100 (Inclusive).\n");
+            		return null;
+        		}
+        		
+        		Date d = new Date(monthAsInt, dayAsInt, yearAsInt);
+        		
+        		return d;
+    		
+    	}
+    	//Show the error message in the TextArea.
+    	catch (Exception e) {
+    		messageArea.appendText("Date values must valid\n");
+    		return null;
+    	}
+	}
+	
+	@FXML
+	void exportFile(ActionEvent actionEvent) {
+		try {
+			
+			
+	        	String text = "";
+				Account [] acc = accounts.getAccounts();
+	        	
+	        	for(int i = 0; i < accounts.getSize(); i++) {
+					text += acc[i].getAccountLabel() + "," + acc[i].getHolder().getFirstName() + "," + acc[i].getHolder().getLastName() + "," + String.format("%.2f",acc[i].getBalance()) + "," + acc[i].getOpenDate() + acc[i].getConditionToFile() + "\n";
+				}
+	            FileChooser fileChooser = new FileChooser();
+	    		Stage stage = new Stage();
+
+	            //Set extension filter for text files
+	            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("TXT files (*.txt)", "*.txt");
+	            fileChooser.getExtensionFilters().add(extFilter);
+	 
+	            //Show save file dialog
+	            File file = fileChooser.showSaveDialog(stage);
+	 
+	            if (file != null) {
+	                saveTextToFile(text, file);
+	            }
+	        }
+		
+			
+			
+		
+		
+		
+		catch(Exception e) {
+			messageArea.appendText("Error occurred exporting file\n");
+    		return;
+		}
+	}
+	
+	public void saveTextToFile(String text, File file) {
+        try {
+            PrintWriter writer;
+            writer = new PrintWriter(file);
+            writer.println(text);
+            writer.close();
+        } catch (Exception e) {
+        	messageArea.appendText(text);
+			return;
+        }
+    }
+	
+	@FXML
+	void resetDatabase(ActionEvent actionEvent) {
+		try {
+			accounts = new AccountDatabase();
+			messageArea.appendText("Database has been reset\n");
+
+		}
+		
+		catch(Exception e) {
+			messageArea.appendText("Error occurred resetting database\n");
+			return;
+		}
+	}
+    }
+	
 
 
 	
 	
 	
-}
+

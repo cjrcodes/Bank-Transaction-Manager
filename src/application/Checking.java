@@ -53,6 +53,11 @@ public class Checking extends Account {
 	public String getAccountType() {
 		return "*Checking*";
 	}
+	
+	@Override
+	public String getAccountLabel() {
+		return "C";
+	}
 
 	/**
 	 * Return a special string condition for subclasses, like direct deposit
@@ -85,6 +90,12 @@ public class Checking extends Account {
 	public double monthlyFee() {
 
 		return this.directDeposit == true || this.getBalance() >= 1500 ? 0 : 25;
+	}
+
+	@Override
+	public String getConditionToFile() {
+		// TODO Auto-generated method stub
+		return this.directDeposit == true ? ",true" : ",false";
 	}
 
 }

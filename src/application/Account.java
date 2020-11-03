@@ -131,6 +131,10 @@ public abstract class Account {
 	 * @return String of the subclass type (Savings, Checking, MoneyMarket)
 	 */
 	public abstract String getAccountType();
+	
+	public abstract String getAccountLabel();
+	
+	public abstract String getConditionToFile();
 
 	/**
 	 * Returns monthly interest, must be implemented by child classes as it is an

@@ -40,6 +40,10 @@ public class Profile {
 		return this.fname + " " + this.lname;
 	}
 	
+	public String getFirstName() {
+		return this.fname;
+	}
+	
 	public String getLastName() {
 		return this.lname;
 	}

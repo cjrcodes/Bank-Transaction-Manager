@@ -13,6 +13,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.RowConstraints?>
 
 <BorderPane maxHeight="600" maxWidth="600" minHeight="600" minWidth="600" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="application.Controller">
@@ -125,7 +126,7 @@
                            <children>
                               <Button fx:id="openDateBtn" mnemonicParsing="false" onAction="#printByOpenDate" text="Sort By Open Date" />
                               <Button fx:id="sortLastNameBtn" mnemonicParsing="false" onAction="#printByLastName" text="Sort By Last Name" GridPane.columnIndex="1" />
-                              <Button fx:id="resetBtn" mnemonicParsing="false" text="Reset Database" GridPane.rowIndex="1" />
+                              <Button fx:id="resetBtn" mnemonicParsing="false" onAction="#resetDatabase" text="Reset Database" GridPane.rowIndex="1" />
                               <Button fx:id="printAllBtn" mnemonicParsing="false" onAction="#printAllAccounts" text="Print All" GridPane.columnIndex="1" GridPane.rowIndex="1" />
                            </children>
                         </GridPane>
@@ -134,6 +135,21 @@
           </Tab>
           
           <Tab text="Import/Export">
+         <content>
+              <AnchorPane minHeight="0.0" minWidth="0.0" prefHeight="180.0" prefWidth="200.0">
+                     <children>
+                        <HBox alignment="CENTER" layoutX="200.0" layoutY="71.0" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="importBtn" mnemonicParsing="false" onAction="#importFile" text="Import File" />
+                           </children>
+                        </HBox>
+                        <HBox alignment="CENTER" layoutX="200.0" layoutY="136.0" prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button fx:id="exportBtn" mnemonicParsing="false" onAction="#exportFile" text="Export File" />
+                           </children>
+                        </HBox>
+                     </children></AnchorPane>
+            </content>
           </Tab>
         </tabs>
       </TabPane>

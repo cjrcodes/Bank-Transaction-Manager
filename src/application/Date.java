@@ -45,15 +45,19 @@ public class Date implements Comparable<Date> {
 	@Override
 	public int compareTo(Date date) {
 		// return 0, 1, or -1
-		if (year == date.year && month == date.month && day == date.day) {
-			return 0;
-		}
+		if (year == date.year){
+            if (month == date.month){
+                if (day == date.day){
+                    return 0;
+                }
+                else if (day > date.day)
+                    return 1;
+            } else if (month > date.month)
+                return 1;
+        } else if (year > date.year)
+            return 1;
 
-		else if (year > date.year || month > date.month || day > date.day) {
-			return 1;
-		}
-
-		return -1;
+        return -1;
 
 	}
 
