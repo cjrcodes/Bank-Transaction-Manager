@@ -1,6 +1,6 @@
-# CS-213-Project-3
+# Bank Transaction Manager
 
-Basic Transaction Manager with GUI
+Bank Transaction Manager with GUI
 
 - Technologies: Java, JavaFX, Eclipse
 
