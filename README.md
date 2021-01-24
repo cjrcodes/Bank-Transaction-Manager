@@ -2,7 +2,7 @@
 
 Bank Transaction Manager with GUI
 
-[](https://github.com/cjrcodes/Bank-Transaction-Manager/blob/main/src/images/Account.png)
+![Account](https://github.com/cjrcodes/Bank-Transaction-Manager/blob/main/src/images/Account.png)
 
 
 - Technologies: Java, JavaFX, Eclipse
