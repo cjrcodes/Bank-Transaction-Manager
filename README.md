@@ -2,6 +2,9 @@
 
 Bank Transaction Manager with GUI
 
+[](https://github.com/cjrcodes/Bank-Transaction-Manager/blob/main/src/images/Account.png)
+
+
 - Technologies: Java, JavaFX, Eclipse
 
 This is a GUI program designed to run a basic banking transaction management system. 
